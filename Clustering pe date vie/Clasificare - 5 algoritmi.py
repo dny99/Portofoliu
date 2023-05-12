@@ -110,7 +110,7 @@ botrytis_upsampled = resample(botrytis,
                               replace=True,     
                               n_samples=1160)
 
-# Combine minority class with downsampled majority class
+# Combinare clasa minoritara cu clasa majoritara downsampled
 date = pd.concat([healthy, plasmopara_upsampled, botrytis_upsampled])
 
                             ## CLASSIFICATION ##
@@ -148,7 +148,7 @@ class_names = ['Healthy', 'Plasmopara', 'Botrytis']
 
 for i in range(0,5):
     
-    #Creare model
+    # Creare model
     if i==0: 
         classifier = GradientBoostingClassifier(n_estimators=90, learning_rate=1, max_features=2, max_depth=4, random_state=0)
         
@@ -188,7 +188,7 @@ for i in range(0,5):
     # Predictie valoare clasa
     y_pred= classifier.predict(X_test)
     
-    # Predict probabilities of each class for test set
+    # Predictia probabilitatilor fiecarei clase pentru setul de test
     y_proba.append(classifier.predict_proba(X_test))
     
     # Calculare matrice de confuzie si adaugare in lista
@@ -201,12 +201,11 @@ for i in range(0,5):
 
     
 # Generare matrice de confuzie
-# Create a 2x2 grid of subplots
 fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(17, 22))
 
 axs = axs.flatten()
 
-# Plot each confusion matrix in a subplot
+# Afisarea fiecarei matrice de confuzie intr-un subplot
 i = 0
 for ax in axs[:-1]:
     im = ax.imshow(cm[i], cmap='Blues')
@@ -224,22 +223,21 @@ for ax in axs[:-1]:
     ax.grid(False)
     i += 1
     
-# Add a title and show the plot
+# Adaugare titlu si afisare plot
 fig.suptitle('Confusion matrices for multiple classifiers', fontsize=21, y=0.95)
 fig.tight_layout(pad=2.2)
 plt.subplots_adjust(top=0.90)
 plt.savefig("Confusion matrices for multiple classifiers.png", bbox_inches="tight")
 plt.show()
 
-# Create a 3x2 grid of subplots
+# Creare matrice 3x2 de subplots
 fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(17, 22))
 
 axs = axs.flatten()
 
-# Plot each confusion matrix in a subplot
 i = 0
 for ax in axs[:-1]:
-    # Compute ROC curve and ROC area for each class
+    # Calculare curba ROC si aria de sub curba ROC pentru fiecare clasa
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -247,7 +245,7 @@ for ax in axs[:-1]:
         fpr[j], tpr[j], _ = roc_curve(y_test == j, y_proba[i][:, j])
         roc_auc[j] = auc(fpr[j], tpr[j])
 
-    # Plot ROC curve for each class
+    # Desenare curba ROC pentru fiecare clasa
     ax.plot(fpr[0], tpr[0], color='darkorange', lw=2, label='Healthy (area = %0.2f)' % roc_auc[0])
     ax.plot(fpr[1], tpr[1], color='blue', lw=2, label='Plasmopara (area = %0.2f)' % roc_auc[1])
     ax.plot(fpr[2], tpr[2], color='green', lw=2, label='Botrytis (area = %0.2f)' % roc_auc[2])
@@ -259,7 +257,7 @@ for ax in axs[:-1]:
     ax.grid(False)
     i += 1
       
-# Add a title and show the plot
+# Adaugare titlu si afisare plot
 fig.suptitle('Receiver Operating Characteristic (ROC) Curve for multiple classifiers', fontsize=21, y=0.95)
 fig.tight_layout(pad=2.2)
 plt.subplots_adjust(top=0.90)
